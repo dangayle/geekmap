@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>LeafletMap for Jeff</title>
+
+
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />
+ <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
+ <![endif]-->
+  <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"></script>
+  <script src="map_array.js"></script>
+
+ </head>
+ <body>
+	<div id="seamap" style="width: 800px; height: 650px"></div>
+
+<script>
+
+var seamap = L.map('seamap').setView([47.634576, -122.203649], 11);
+
+var styleA = {
+    "color": "#ff7800",
+    "weight": 3,
+    "opacity": 0.65
+};
+
+var styleB = {
+    "color": "#ff8888",
+    "weight": 5,
+    "opacity": 0.65
+};
+
+L.tileLayer('http://{s}.tile.cloudmade.com/0f70da6b66a74b45b2db5d28622963a2/997/256/{z}/{x}/{y}.png', {
+
+    maxZoom: 12
+}).addTo(seamap);
+
+
+var layerz = {
+    Fantasy: "Fantasy Geeks",
+    Programming: "Programming Geeks",
+    GeekMedia: "Geek Media Readers"
+
+};
+
+L.control.layers(null, layerz,{collapsed: false}).addTo(seamap);
+
+
+// var ziparray_a = [a98134,a98144]
+
+// for(var i=0;i < ziparray_a.length; i++){
+// 	L.geoJson(ziparray_a[1], {
+// 		style: styleA
+// 	}).addTo(seamap);
+// };
+
+
+function getColor(d) {
+    return d > 0.05 ? '#800026' :
+           d > 0.04 ? '#BD0026' :
+           d > 0.03  ? '#E31A1C' :
+           d > 0.02  ? '#FC4E2A' :
+           d > 0.01   ? '#FD8D3C' :
+                      '#FFF';
+}
+
+function style(feature) {
+    return {
+        fillColor: getColor(Number(feature.properties["Geek Media %"])),
+        weight: 2,
+        opacity: 1,
+        color: '#FFEDA0',
+        fillOpacity: 0.65
+    };
+}
+
+var add_to_map = function(zip){
+    L.geoJson(zip, {
+        style: style(zip)
+    }).addTo(seamap);
+}
+
+map_array.map(add_to_map) //js map function (as in map/reduce)
+
+//var ziparray_b = [b98144]
+
+//for(var i=0;i < ziparray_b.length; i++){
+
+//	L.geoJson(ziparray_b[0], {
+//		style: styleB
+//	}).addTo(seamap);
+//};
+
+
+
+
+
+</script>
+
+
+ </body>
+ </html>
+
+
