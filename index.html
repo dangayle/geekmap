@@ -14,47 +14,141 @@
 
  </head>
  <body>
-	<div id="seamap" style="width: 800px; height: 650px"></div>
+  <div id="seamap" style="width: 800px; height: 650px"></div>
 
 <script>
 
-var seamap = L.map('seamap').setView([47.634576, -122.203649], 11);
+var opacityscale = 1;
 
-var styleA = {
-    "color": "#ff7800",
-    "weight": 3,
-    "opacity": 0.65
-};
+var seamap = L.map('seamap').setView([47.634576, -122.203649], 10);
 
-var styleB = {
-    "color": "#ff8888",
-    "weight": 5,
-    "opacity": 0.65
-};
+
 
 L.tileLayer('http://{s}.tile.cloudmade.com/0f70da6b66a74b45b2db5d28622963a2/997/256/{z}/{x}/{y}.png', {
-
     maxZoom: 12
 }).addTo(seamap);
 
+var pmin = 1;
+var pmax = 0;
+
+for (id in map_array) {
+    feature = map_array[id];
+    value = parseInt(feature.properties['Fantasy'] ) / parseInt(feature.properties['Facebook Population']);
+    if (value < pmin) pmin = value;
+    if (value > pmax) pmax = value;
+};
+
+var Fantasy = L.geoJson(null, {
+        "style": function(feature) {
+            value = parseInt(feature.properties['Fantasy']) / parseInt(feature.properties['Facebook Population'])
+            opacity = ((value - pmin) / (pmax - pmin));
+            return {
+                "color": "#000000",
+                "weight": 0.9,
+                "opacity": 1,
+                "fill": 1,
+                "fillColor": "#005500",
+                "fillOpacity": opacity * opacityscale * .9
+            };
+        }
+    }
+);
+
+Fantasy.addData(map_array);
+
+var pmin = 1;
+var pmax = 0;
+
+for (id in map_array) {
+    feature = map_array[id];
+    value = parseInt(feature.properties['Programming'] ) / parseInt(feature.properties['Facebook Population']);
+    if (value < pmin) pmin = value;
+    if (value > pmax) pmax = value;
+};
+
+var Programming = L.geoJson(null, {
+        "style": function(feature) {
+            value = parseInt(feature.properties['Programming']) / parseInt(feature.properties['Facebook Population'])
+            opacity = ((value - pmin) / (pmax - pmin));
+            return {
+                "color": "#000000",
+                "weight": 0.9,
+                "opacity": 1,
+                "fill": 1,
+                "fillColor": "#0000AA",
+                "fillOpacity": opacity * opacityscale * .9
+            };
+        }
+    }
+);
+
+Programming.addData(map_array)
+
+var gmin = 1;
+var gmax = 0;
+
+for (id in map_array) {
+    feature = map_array[id];
+    value = parseInt(feature.properties['Geek Media'] ) / parseInt(feature.properties['Facebook Population']);
+    if (value < gmin) gmin = value;
+    if (value > gmax) gmax = value;
+};
+
+var GeekMedia = L.geoJson(null, {
+        "style": function(feature) {
+            value = parseInt(feature.properties['Geek Media']) / parseInt(feature.properties['Facebook Population'])
+            opacity = ((value - gmin) / (gmax - gmin));
+            return {
+                "color": "#000000",
+                "weight": 0.5,
+                "opacity": 1,
+                "fill": 1,
+                "fillColor": "#990099",
+                "fillOpacity": opacity * opacityscale * .9
+            };
+        }
+    }
+);
+
+GeekMedia.addData(map_array)
+
+var smin = 1;
+var smax = 0;
+
+for (id in map_array) {
+    feature = map_array[id];
+    value = parseInt(feature.properties['Sci-Fi'] ) / parseInt(feature.properties['Facebook Population']);
+    if (value < smin) smin = value;
+    if (value > smax) smax = value;
+};
+
+var SciFi = L.geoJson(null, {
+        "style": function(feature) {
+            value = parseInt(feature.properties['Sci-Fi']) / parseInt(feature.properties['Facebook Population'])
+            opacity = ((value - smin) / (smax - smin));
+            return {
+                "color": "#000000",
+                "weight": 0.5,
+                "opacity": 1,
+                "fill": 1,
+                "fillColor": "#AA0000",
+                "fillOpacity": opacity * opacityscale * .9
+            };
+        }
+    }
+);
+
+SciFi.addData(map_array)
 
 var layerz = {
-    Fantasy: "Fantasy Geeks",
-    Programming: "Programming Geeks",
-    GeekMedia: "Geek Media Readers"
-
+    "Fantasy": Fantasy,
+    "Programming": Programming,
+    "Geek Media": GeekMedia,
+    "Sci-Fi": SciFi
 };
 
 L.control.layers(null, layerz,{collapsed: false}).addTo(seamap);
 
-
-// var ziparray_a = [a98134,a98144]
-
-// for(var i=0;i < ziparray_a.length; i++){
-// 	L.geoJson(ziparray_a[1], {
-// 		style: styleA
-// 	}).addTo(seamap);
-// };
 
 
 function getColor(d) {
@@ -82,17 +176,6 @@ var add_to_map = function(zip){
     }).addTo(seamap);
 }
 
-map_array.map(add_to_map) //js map function (as in map/reduce)
-
-//var ziparray_b = [b98144]
-
-//for(var i=0;i < ziparray_b.length; i++){
-
-//	L.geoJson(ziparray_b[0], {
-//		style: styleB
-//	}).addTo(seamap);
-//};
-
 
 
 
@@ -100,7 +183,5 @@ map_array.map(add_to_map) //js map function (as in map/reduce)
 </script>
 
 
- </body>
- </html>
-
-
+</body>
+</html>
